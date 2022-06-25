@@ -1,3 +1,6 @@
+# SimpleString
+通过XML注释或指定特性转换成字符串输出。
+
 <!--TOC-->
 - [SimpleString](#simplestring)
     - [安装](#安装)
@@ -6,9 +9,7 @@
     - [食用方法](#食用方法)
     - [效果](#效果)
 <!--/TOC-->
-
-# SimpleString
-通过XML注释或指定特性转换成字符串输出。
+---
 
 #### 安装
 > Install-Package SimpleString
