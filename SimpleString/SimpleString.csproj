@@ -9,6 +9,7 @@
     <PackageProjectUrl>https://github.com/LI-XIAOYAO/SimpleString.git</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/LI-XIAOYAO/SimpleString.git</RepositoryUrl>
+	<VersionPrefix>1.0.1</VersionPrefix>
   </PropertyGroup>
 
   <ItemGroup>
