@@ -171,49 +171,15 @@ namespace SimpleString
                     stringBuilder.Append(", ");
                 }
 
-                stringBuilder.Append($"[键{_config.Operator}");
-
-                //var keyType = item.Key.GetType();
-                //if ((keyType.IsGenericType || keyType.IsArray) && !keyType.IsValueType)
-                //{
-                //    if (typeof(IDictionary).IsAssignableFrom(keyType))
-                //    {
-                //        DictionaryHandler(stringBuilder, item.Key as IDictionary, ignoreProps);
-                //    }
-                //    else
-                //    {
-                //        ListHandler(stringBuilder, item.Key as IEnumerable, ignoreProps);
-                //    }
-                //}
-                //else
-                //{
-                //    stringBuilder.Append($"{item.Key}");
-                //}
-
+                //stringBuilder.Append($"[键{_config.Operator}");
                 ToSimpleString(item.Key, stringBuilder, ignoreProps);
 
-                stringBuilder.Append($", 值{_config.Operator}");
+                stringBuilder.Append($"{_config.Operator}");
 
-                //var valueType = item.Value.GetType();
-                //if ((valueType.IsGenericType || valueType.IsArray) && !valueType.IsValueType)
-                //{
-                //    if (typeof(IDictionary).IsAssignableFrom(valueType))
-                //    {
-                //        DictionaryHandler(stringBuilder, item.Value as IDictionary, ignoreProps);
-                //    }
-                //    else
-                //    {
-                //        ListHandler(stringBuilder, item.Value as IEnumerable, ignoreProps);
-                //    }
-                //}
-                //else
-                //{
-                //    stringBuilder.Append($"{item.Value}");
-                //}
-
+                //stringBuilder.Append($", 值{_config.Operator}");
                 ToSimpleString(item.Value, stringBuilder, ignoreProps);
 
-                stringBuilder.Append($"]");
+                //stringBuilder.Append($"]");
             }
         }
 
