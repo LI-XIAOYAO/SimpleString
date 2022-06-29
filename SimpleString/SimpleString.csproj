@@ -9,7 +9,9 @@
     <PackageProjectUrl>https://github.com/LI-XIAOYAO/SimpleString.git</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/LI-XIAOYAO/SimpleString.git</RepositoryUrl>
-	<VersionPrefix>1.0.1</VersionPrefix>
+	<VersionPrefix>1.0.2</VersionPrefix>
+	<PackageTags>string;Annotation;xml;Attribute</PackageTags>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>

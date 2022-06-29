@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
 
@@ -65,11 +64,14 @@ namespace SimpleString.Extenisons.Internal
                 var tNodes = nodes.Where(c => c.Attributes[ATTRIBUTE].Value.StartsWith(TYPE_PREFIX));
                 foreach (var node in tNodes)
                 {
-                    var typeName = node.Attributes[ATTRIBUTE].Value.TrimStart(TYPE_PREFIX.ToArray());
+                    var typeName = Regex.Replace(node.Attributes[ATTRIBUTE].Value, $"^{TYPE_PREFIX}", string.Empty);
 
                     // 当前类型节点对应成员
                     var childrens = nodes.Where(c => Regex.IsMatch(c.Attributes[ATTRIBUTE].Value, $@"^[^T]+?\:{typeName.Replace(".", @"\.")}\.[^\.]+?$"));
-                    XMLDocs.Add(typeName, childrens.ToDictionary(c => Regex.Replace(c.Attributes[ATTRIBUTE].Value, @"^.+?\:", string.Empty), c => c.SelectSingleNode(SUMMARY).InnerText.Trim()));
+                    if (childrens.Any())
+                    {
+                        XMLDocs.Add(typeName, childrens.ToDictionary(c => Regex.Replace(c.Attributes[ATTRIBUTE].Value, @"^.+?\:", string.Empty), c => c.SelectSingleNode(SUMMARY).InnerText.Trim()));
+                    }
                 }
             }
 
