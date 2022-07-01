@@ -204,6 +204,11 @@ namespace SimpleString.Extenisons.Tests
 
             var result = new Test
             {
+                TestClass = new TestClass
+                {
+                    MyProperty = 1,
+                    TestEnum = TestEnum.B
+                },
                 MyProperty1 = 1,
                 MyProperty2 = 2,
                 MyProperty3 = new Dictionary<int, int> {

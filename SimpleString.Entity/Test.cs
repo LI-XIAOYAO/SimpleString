@@ -10,6 +10,12 @@ namespace SimpleString.Entity
     public class Test
     {
         /// <summary>
+        /// 测试类
+        /// </summary>
+        [Description("测试类")]
+        public TestClass TestClass { get; set; }
+
+        /// <summary>
         /// XML属性1
         /// </summary>
         [DisplayName("oooo")]

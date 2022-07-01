@@ -172,12 +172,28 @@ namespace SimpleString
                 }
 
                 //stringBuilder.Append($"[键{_config.Operator}");
-                ToSimpleString(item.Key, stringBuilder, ignoreProps);
+                //ToSimpleString(item.Key, stringBuilder, ignoreProps);
+                if (_config.HandCustomType)
+                {
+                    ToSimpleString(item.Key, stringBuilder, ignoreProps);
+                }
+                else
+                {
+                    stringBuilder.Append($"{item.Key}");
+                }
 
                 stringBuilder.Append($"{_config.Operator}");
 
                 //stringBuilder.Append($", 值{_config.Operator}");
-                ToSimpleString(item.Value, stringBuilder, ignoreProps);
+                //ToSimpleString(item.Value, stringBuilder, ignoreProps);
+                if (_config.HandCustomType)
+                {
+                    ToSimpleString(item.Value, stringBuilder, ignoreProps);
+                }
+                else
+                {
+                    stringBuilder.Append($"{item.Value}");
+                }
 
                 //stringBuilder.Append($"]");
             }

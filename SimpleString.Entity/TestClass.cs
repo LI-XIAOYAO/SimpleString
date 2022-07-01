@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SimpleString.Extenisons;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
 namespace SimpleString.Entity
 {
@@ -21,5 +21,29 @@ namespace SimpleString.Entity
         /// </summary>
         [Description("属性2")]
         public int MyProperty2 { get; set; }
+
+        /// <summary>
+        /// 枚举
+        /// </summary>
+        [Description("枚举")]
+        public TestEnum TestEnum { get; set; }
+
+        public override string ToString() => this.ToSimpleString();
+    }
+
+    /// <summary>
+    /// 测试枚举
+    /// </summary>
+    public enum TestEnum
+    {
+        /// <summary>
+        /// 枚举A
+        /// </summary>
+        A,
+
+        /// <summary>
+        /// 枚举B
+        /// </summary>
+        B
     }
 }
