@@ -106,7 +106,9 @@ namespace SimpleString
         /// <returns></returns>
         private bool IsDefinedXMLAnnotation(MemberInfo prop)
         {
-            return null != prop && (_config.XMLDocContainer?.Any() ?? false) && _config.XMLDocContainer.ContainsKey(prop.DeclaringType.FullName) && _config.XMLDocContainer[prop.DeclaringType.FullName].ContainsKey($"{prop.DeclaringType.FullName}.{prop.Name}");
+            var fullName = prop.DeclaringType.FullName.Replace("+", ".");
+
+            return null != prop && (_config.XMLDocContainer?.Any() ?? false) && _config.XMLDocContainer.ContainsKey(fullName) && _config.XMLDocContainer[fullName].ContainsKey($"{fullName}.{prop.Name}");
         }
 
         /// <summary>
@@ -116,13 +118,14 @@ namespace SimpleString
         /// <returns></returns>
         private string GetXMLAnnotationByName(MemberInfo prop)
         {
-            var propFullName = $"{prop.DeclaringType.FullName}.{prop.Name}";
-            if (null == prop || (!_config.XMLDocContainer?.Any() ?? true) || !_config.XMLDocContainer.ContainsKey(prop.DeclaringType.FullName) || !_config.XMLDocContainer[prop.DeclaringType.FullName].ContainsKey(propFullName))
-            {
-                return null;
-            }
+            //if (!IsDefinedXMLAnnotation(prop))
+            //{
+            //    return null;
+            //}
 
-            return _config.XMLDocContainer[prop.DeclaringType.FullName][propFullName];
+            var fullName = prop.DeclaringType.FullName.Replace("+", ".");
+
+            return _config.XMLDocContainer[fullName][$"{fullName}.{prop.Name}"];
         }
     }
 }

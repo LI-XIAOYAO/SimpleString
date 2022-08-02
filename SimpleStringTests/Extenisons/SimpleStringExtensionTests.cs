@@ -150,6 +150,10 @@ namespace SimpleString.Extenisons.Tests
                 },
                 Strs = new List<string> {
                     "111", "222", "333"
+                },
+                InternalClass1 = new Test.InternalClass
+                {
+                    MyProperty = 3
                 }
             };
             var str0 = result.ToSimpleString();

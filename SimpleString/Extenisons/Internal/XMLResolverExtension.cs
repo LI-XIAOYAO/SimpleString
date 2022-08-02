@@ -67,7 +67,7 @@ namespace SimpleString.Extenisons.Internal
                     var typeName = Regex.Replace(node.Attributes[ATTRIBUTE].Value, $"^{TYPE_PREFIX}", string.Empty);
 
                     // 当前类型节点对应成员
-                    var childrens = nodes.Where(c => Regex.IsMatch(c.Attributes[ATTRIBUTE].Value, $@"^[^T]+?\:{typeName.Replace(".", @"\.")}\.[^\.]+?$"));
+                    var childrens = nodes.Where(c => Regex.IsMatch(c.Attributes[ATTRIBUTE].Value, $@"^[^TM]+?\:{typeName.Replace(".", @"\.")}\.[^\.]+?$"));
                     if (childrens.Any())
                     {
                         XMLDocs.Add(typeName, childrens.ToDictionary(c => Regex.Replace(c.Attributes[ATTRIBUTE].Value, @"^.+?\:", string.Empty), c => c.SelectSingleNode(SUMMARY).InnerText.Trim()));

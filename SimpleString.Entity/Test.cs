@@ -92,6 +92,12 @@ namespace SimpleString.Entity
         /// <summary>
         /// XML内部类
         /// </summary>
+        [Description("内部类")]
+        public InternalClass InternalClass1 { get; set; }
+
+        /// <summary>
+        /// XML内部类
+        /// </summary>
         public class InternalClass
         {
             /// <summary>
@@ -99,10 +105,16 @@ namespace SimpleString.Entity
             /// </summary>
             [Description("属性1")]
             public int MyProperty { get; set; }
+
+            public override string ToString() => this.ToSimpleString();
         }
 
         public int MyProperty6 { get; set; }
 
+        /// <summary>
+        /// ToString
+        /// </summary>
+        /// <returns></returns>
         public override string ToString() => this.ToSimpleString();
     }
 
@@ -116,6 +128,26 @@ namespace SimpleString.Entity
         /// </summary>
         [Description("属性1")]
         public int MyProperty1 { get; set; }
+
+        /// <summary>
+        /// XML内部类
+        /// </summary>
+        [Description("内部类")]
+        public InternalClass InternalClass1 { get; set; }
+
+        /// <summary>
+        /// XML内部类
+        /// </summary>
+        public class InternalClass
+        {
+            /// <summary>
+            /// XML属性1
+            /// </summary>
+            [Description("属性1")]
+            public int MyProperty { get; set; }
+
+            public override string ToString() => this.ToSimpleString();
+        }
 
         public override string ToString() => this.ToSimpleString();
     }
