@@ -1,8 +1,8 @@
-﻿using System;
+﻿using SimpleString;
+using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace SimpleString.Extenisons
+namespace System
 {
     /// <summary>
     /// 简单字符串
@@ -16,7 +16,7 @@ namespace SimpleString.Extenisons
         /// <returns></returns>
         public static string ToSimpleString(this object obj)
         {
-            switch (SimpleString.Config.HandleType)
+            switch (SimpleString.SimpleString.Config.HandleType)
             {
                 case HandleType.Attribute:
                     return new AttributeString().ToSimpleString(obj);

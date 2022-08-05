@@ -1,10 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using SimpleString;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
-namespace SimpleString.Extenisons
+namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
     /// 注入
@@ -19,7 +18,7 @@ namespace SimpleString.Extenisons
         /// <returns></returns>
         public static IServiceCollection AddSimpleString(this IServiceCollection serviceProvider, Action<Config> config = null)
         {
-            SimpleString.Init(config);
+            SimpleString.SimpleString.Init(config);
 
             return serviceProvider.AddSingleton<AttributeString>();
         }

@@ -1,5 +1,4 @@
 ﻿using SimpleString.Attributes;
-using SimpleString.Extenisons;
 using System.ComponentModel;
 
 namespace SimpleString.Entity

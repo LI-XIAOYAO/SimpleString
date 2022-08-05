@@ -158,7 +158,7 @@ namespace SimpleString
         /// <param name="ignoreProps"></param>
         protected virtual void DictionaryHandler(StringBuilder stringBuilder, IDictionary collectionVals, params PropertyInfo[] ignoreProps)
         {
-            if (null == collectionVals || collectionVals.Count < 1)
+            if (null == collectionVals || 0 == collectionVals.Count)
             {
                 return;
             }
@@ -171,31 +171,25 @@ namespace SimpleString
                     stringBuilder.Append(", ");
                 }
 
-                //stringBuilder.Append($"[键{_config.Operator}");
-                //ToSimpleString(item.Key, stringBuilder, ignoreProps);
-                if (_config.HandCustomType)
+                if (_config.HandCustomType || IsContainsStack(item.Key))
                 {
                     ToSimpleString(item.Key, stringBuilder, ignoreProps);
                 }
                 else
                 {
-                    stringBuilder.Append($"{item.Key}");
+                    stringBuilder.Append(item.Key);
                 }
 
-                stringBuilder.Append($"{_config.Operator}");
+                stringBuilder.Append(_config.Operator);
 
-                //stringBuilder.Append($", 值{_config.Operator}");
-                //ToSimpleString(item.Value, stringBuilder, ignoreProps);
-                if (_config.HandCustomType)
+                if (_config.HandCustomType || IsContainsStack(item.Value))
                 {
                     ToSimpleString(item.Value, stringBuilder, ignoreProps);
                 }
                 else
                 {
-                    stringBuilder.Append($"{item.Value}");
+                    stringBuilder.Append(item.Value);
                 }
-
-                //stringBuilder.Append($"]");
             }
         }
 

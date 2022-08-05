@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
-using System.Text;
 
 namespace SimpleString
 {
@@ -121,7 +120,7 @@ namespace SimpleString
         public bool IgnoreLoopReference { get; set; } = false;
 
         /// <summary>
-        /// 自定义类型处理，默认调用 ToString() 否则 ToSimpleString().
+        /// 自定义类型处理，默认 false 调用 ToString()，否则 ToSimpleString().
         /// </summary>
         public bool HandCustomType { get; set; } = false;
 

@@ -5,7 +5,6 @@ using SimpleString.Entity;
 using SimpleStringTests;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace SimpleString.Extenisons.Tests
 {
@@ -39,7 +38,11 @@ namespace SimpleString.Extenisons.Tests
                 },
                 MyProperty5 = new Test2
                 {
-                    MyProperty1 = 4
+                    MyProperty1 = 4,
+                    InternalClass1 = new Test2.InternalClass
+                    {
+                        MyProperty = 5
+                    }
                 },
                 List = new List<Test2>
                 {
@@ -63,6 +66,10 @@ namespace SimpleString.Extenisons.Tests
                 },
                 Strs = new List<string> {
                     "111", "222", "333"
+                },
+                InternalClass1 = new Test.InternalClass
+                {
+                    MyProperty = 3
                 }
             };
             var str0 = result.ToSimpleString();
@@ -249,6 +256,10 @@ namespace SimpleString.Extenisons.Tests
                 },
                 Strs = new List<string> {
                     "111", "222", "333"
+                },
+                InternalClass1 = new Test.InternalClass
+                {
+                    MyProperty = 3
                 }
             };
             var str0 = result.ToSimpleString();
