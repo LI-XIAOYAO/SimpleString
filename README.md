@@ -11,11 +11,13 @@
 ---
 
 #### 安装
-> Install-Package SimpleString
+> `Install-Package SimpleString`
 
 #### 配置
+
 > 基础配置
-````
+
+````c#
 var config = new Config
 {
     AttributeType = typeof(DescriptionAttribute), // 解析的特性，默认DescriptionAttribute（HandleType.Attribute时生效）
@@ -26,8 +28,10 @@ var config = new Config
     Operator = "= ", // 间隔符号，默认“ = ”
 }.AddXml("xxx.xml"); // XML文档路径，类必须添加注释否则不会解析
 ````
+
 > 自定义配置
-````
+
+````c#
 // 自定义配置只需要继承基础配置也可设置默认值
 public class ENConfig : Config
 {
@@ -53,11 +57,14 @@ public class ENAttribute : Attribute
 ````
 
 #### 特性
->  忽略：[IgnoreSimpleString]
+
+>  忽略：`[IgnoreSimpleString]`
 
 #### 使用
+
 > 通用
-```
+
+```c#
  // 初始化，默认全局
 SimpleString.Config(c =>
 {
@@ -80,7 +87,8 @@ var str = new SimpleString(new Config
 ```
 
 > 注入使用
-````
+
+````c#
 // 默认静态全局注入
 services.AddSimpleString(c =>
 {
@@ -112,7 +120,8 @@ var str = _enSimpleString.ToSimpleString(test);
 ````
 
 #### 示例
-````
+
+````c#
 /// <summary>
 /// 测试 （XML解析时类注释必须添加）
 /// </summary>
