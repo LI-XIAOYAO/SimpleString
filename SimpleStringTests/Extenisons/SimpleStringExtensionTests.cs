@@ -3,8 +3,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimpleString.Entity;
 using SimpleStringTests;
-using System;
-using System.Collections.Generic;
 
 namespace SimpleString.Extenisons.Tests
 {
@@ -14,12 +12,12 @@ namespace SimpleString.Extenisons.Tests
         [TestMethod()]
         public void ToSimpleStringByAttributeTest()
         {
-            SimpleString.Init(c =>
+            SimpleString.Config(c =>
             {
                 //c.Operator = ": ";
                 //c.AttributeType = typeof(System.ComponentModel.DisplayNameAttribute);
                 //c.Name = nameof(System.ComponentModel.DisplayNameAttribute.DisplayName);
-                c.HandleType = HandleType.Attribute;
+                c.HandleOptions = HandleOptions.Attribute;
                 //c.HandCustomType = true;
                 //c.IgnoreLoopReference = true;
             });
@@ -98,7 +96,7 @@ namespace SimpleString.Extenisons.Tests
 
             var str4 = new SimpleString(new Config
             {
-                HandleType = HandleType.Attribute
+                HandleOptions = HandleOptions.Attribute
             }).ToSimpleString(result);
             Console.WriteLine("str4: {0}", str4);
             Assert.AreNotEqual(null, str4);
@@ -107,17 +105,33 @@ namespace SimpleString.Extenisons.Tests
         [TestMethod()]
         public void ToSimpleStringByXMLTest()
         {
-            SimpleString.Init(c =>
+            SimpleString.Config(c =>
             {
                 //c.Operator = ": ";
                 //c.AttributeType = typeof(System.ComponentModel.DisplayNameAttribute);
                 //c.Name = nameof(System.ComponentModel.DisplayNameAttribute.DisplayName);
-                c.XMLDocPath = new HashSet<string> {
-                    "SimpleString.Entity.xml"
-                };
+                c.AddXml("SimpleString.Entity.xml");
                 //c.HandCustomType = true;
                 //c.IgnoreLoopReference = true;
             });
+
+            var eav = TestEnum.A.ToSimpleString();
+            var ts = new TestClass
+            {
+                TestEnum = TestEnum.A,
+                TestEnumNull = null,
+                TestStruct = new TestStruct
+                {
+                    MyProperty = 3,
+                    MyProperty1 = 2
+                },
+                TestStruct1 = new TestStruct
+                {
+                    MyProperty1 = 1,
+                    MyProperty = null
+                }
+            };
+            var tss = ts.ToString();
 
             var result = new Test
             {
@@ -187,12 +201,10 @@ namespace SimpleString.Extenisons.Tests
             Console.WriteLine("str3: {0}", str3);
             Assert.AreNotEqual(null, str3);
 
-            var str4 = new SimpleString(new Config
-            {
-                XMLDocPath = new HashSet<string> {
-                    "SimpleString.Entity.xml"
-                }
-            }).ToSimpleString(result);
+            var config = new Config();
+            config.AddXml("SimpleString.Entity.xml");
+
+            var str4 = new SimpleString(config).ToSimpleString(result);
             Console.WriteLine("str4: {0}", str4);
             Assert.AreNotEqual(null, str4);
         }
@@ -206,9 +218,13 @@ namespace SimpleString.Extenisons.Tests
                      c.AddSimpleString(c =>
                      {
                          c.Operator = "=";
-                         c.XMLDocPath.Add("SimpleString.Entity.xml");
+                         c.AddXml("SimpleString.Entity.xml", "SimpleString.xml");
                      });
-                     c.AddSimpleString<Config>(c => c.Operator = "=>");
+                     c.AddSimpleString<Config>(c =>
+                     {
+                         c.Operator = "=>";
+                         c.HandCustomType = true;
+                     });
                      c.AddSimpleString<DisplayAttributeConfig>();
                  })
                  .Build();

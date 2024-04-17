@@ -1,6 +1,4 @@
 ﻿using SimpleString;
-using System;
-using System.Collections.Generic;
 
 namespace System
 {
@@ -9,6 +7,9 @@ namespace System
     /// </summary>
     public static class SimpleStringExtension
     {
+        private static SimpleStringBase _simpleString;
+        private static readonly object _lock = new object();
+
         /// <summary>
         /// 返回转换后的字符串
         /// </summary>
@@ -16,15 +17,28 @@ namespace System
         /// <returns></returns>
         public static string ToSimpleString(this object obj)
         {
-            switch (SimpleString.SimpleString.Config.HandleType)
+            if (null == _simpleString)
             {
-                case HandleType.Attribute:
-                    return new AttributeString().ToSimpleString(obj);
+                lock (_lock)
+                {
+                    if (null == _simpleString)
+                    {
+                        switch (SimpleString.SimpleString.DefaultConfig.HandleOptions)
+                        {
+                            case HandleOptions.Attribute:
+                                _simpleString = new AttributeString();
+                                break;
 
-                case HandleType.XML:
-                default:
-                    return new XMLString().ToSimpleString(obj);
+                            case HandleOptions.XML:
+                            default:
+                                _simpleString = new XMLString();
+                                break;
+                        }
+                    }
+                }
             }
+
+            return _simpleString.ToSimpleString(obj);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace SimpleString
         /// 文档注释转换字符串
         /// </summary>
         protected SimpleStringBase()
-            : this(SimpleString.Config)
+            : this(SimpleString.DefaultConfig)
         {
         }
 
@@ -78,18 +78,18 @@ namespace SimpleString
                 stringBuilder = new StringBuilder();
             }
 
-            // 值类型、枚举、string
-            if (type.IsValueType && type.IsPrimitive || type.IsEnum || type == typeof(string))
+            // 值类型、string
+            if (SimpleStringBase.IsValueType(type))
             {
                 stringBuilder.Append(obj.ToString());
 
                 return stringBuilder.ToString();
             }
 
-            stringBuilder.Append("[");
+            stringBuilder.Append('[');
             AddStack(type, obj);
 
-            if (type.IsGenericType || type.IsArray)
+            if ((type.IsGenericType || type.IsArray) && typeof(IEnumerable).IsAssignableFrom(type))
             {
                 if (typeof(IDictionary).IsAssignableFrom(type))
                 {
@@ -97,7 +97,7 @@ namespace SimpleString
                 }
                 else
                 {
-                    ListHandler(stringBuilder, (obj as IEnumerable), ignoreProps);
+                    ListHandler(stringBuilder, obj as IEnumerable, ignoreProps);
                 }
             }
             else
@@ -106,7 +106,7 @@ namespace SimpleString
             }
 
             RemoveStack(type);
-            stringBuilder.Append("]");
+            stringBuilder.Append(']');
 
             return stringBuilder.ToString();
         }
@@ -230,6 +230,52 @@ namespace SimpleString
         protected virtual bool IsContainsStack(object obj)
         {
             return null != obj && _stacks.Contains(obj);
+        }
+
+        /// <summary>
+        /// IsValueType
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        protected static bool IsValueType(Type type)
+        {
+            return type.IsValueType && type.IsPrimitive || type == typeof(string) || (type.IsGenericType && typeof(Nullable<>) == type.GetGenericTypeDefinition() && SimpleStringBase.IsValueType(Nullable.GetUnderlyingType(type)));
+        }
+
+        /// <summary>
+        /// GetNullableUnderlyingType
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        protected static Type GetNullableUnderlyingType(Type type)
+        {
+            if (type.IsGenericType && typeof(Nullable<>) == type.GetGenericTypeDefinition())
+            {
+                return Nullable.GetUnderlyingType(type);
+            }
+
+            return type;
+        }
+
+        /// <summary>
+        /// GetNullableUnderlyingTypeValue
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        protected static object GetNullableUnderlyingTypeValue(Type type, object value)
+        {
+            if (null == value)
+            {
+                return value;
+            }
+
+            if (type.IsGenericType && typeof(Nullable<>) == type.GetGenericTypeDefinition())
+            {
+                return type.GetProperty("Value").GetValue(value);
+            }
+
+            return value;
         }
     }
 }

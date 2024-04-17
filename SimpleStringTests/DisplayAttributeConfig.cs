@@ -1,6 +1,4 @@
 ﻿using SimpleString;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace SimpleStringTests

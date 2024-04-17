@@ -25,58 +25,66 @@ namespace SimpleString.Extenisons.Internal
         /// <exception cref="ArgumentException"></exception>
         public static void XMLDocResolver(this Config config)
         {
-            if (HandleType.XML != config.HandleType)
+            if (HandleOptions.XML != config.HandleOptions)
             {
                 return;
             }
 
-            if (!config.XMLDocPath?.Any() ?? true)
+            if (0 == config.XMLDocPath.Count)
             {
-                config.ErrorMsg = $"Param {nameof(config.XMLDocPath)} null or empty.";
+                config.ErrorMsg = $"Param {nameof(config.XMLDocPath)} is empty.";
 
-                throw new ArgumentException("Param null or empty.", nameof(config.XMLDocPath));
+                throw new ArgumentException("Param is empty.", nameof(config.XMLDocPath));
             }
 
             var XMLDocs = new Dictionary<string, Dictionary<string, string>>();
+            var xmlDocument = new XmlDocument();
 
-            XmlDocument xmlDocument = new XmlDocument();
-            foreach (var path in config.XMLDocPath)
+            try
             {
-                if (!File.Exists(path))
+                foreach (var path in config.XMLDocPath)
                 {
-                    config.ErrorMsg = $@"""{path}"" not found.";
-
-                    return;
-                }
-
-                xmlDocument.Load(path);
-
-                // 成员根节点
-                var root = xmlDocument.DocumentElement.SelectSingleNode(ROOT);
-                if (0 == root.ChildNodes.Count)
-                {
-                    continue;
-                }
-
-                var nodes = root.ChildNodes.Cast<XmlNode>();
-
-                // 获取所有类型节点
-                var tNodes = nodes.Where(c => c.Attributes[ATTRIBUTE].Value.StartsWith(TYPE_PREFIX));
-                foreach (var node in tNodes)
-                {
-                    var typeName = Regex.Replace(node.Attributes[ATTRIBUTE].Value, $"^{TYPE_PREFIX}", string.Empty);
-
-                    // 当前类型节点对应成员
-                    var childrens = nodes.Where(c => Regex.IsMatch(c.Attributes[ATTRIBUTE].Value, $@"^[^TM]+?\:{typeName.Replace(".", @"\.")}\.[^\.]+?$"));
-                    if (childrens.Any())
+                    if (!File.Exists(path))
                     {
-                        XMLDocs.Add(typeName, childrens.ToDictionary(c => Regex.Replace(c.Attributes[ATTRIBUTE].Value, @"^.+?\:", string.Empty), c => c.SelectSingleNode(SUMMARY).InnerText.Trim()));
+                        config.ErrorMsg = $"'{path}' not found.";
+
+                        return;
+                    }
+
+                    xmlDocument.Load(path);
+
+                    // 成员根节点
+                    var root = xmlDocument.DocumentElement.SelectSingleNode(ROOT);
+                    if (0 == root.ChildNodes.Count)
+                    {
+                        continue;
+                    }
+
+                    var nodes = root.ChildNodes.Cast<XmlNode>().ToList();
+
+                    // 获取所有类型节点
+                    var tNodes = nodes.Where(c => c.Attributes[ATTRIBUTE].Value.StartsWith(TYPE_PREFIX));
+
+                    foreach (var node in tNodes)
+                    {
+                        var typeName = Regex.Replace(node.Attributes[ATTRIBUTE].Value, $"^{TYPE_PREFIX}", string.Empty);
+
+                        // 当前类型节点对应成员
+                        var childrens = nodes.Where(c => Regex.IsMatch(c.Attributes[ATTRIBUTE].Value, $@"^[^TM]+?\:{typeName.Replace(".", @"\.")}\.[^\.]+?$"));
+                        if (childrens.Any())
+                        {
+                            XMLDocs[typeName] = childrens.ToDictionary(c => Regex.Replace(c.Attributes[ATTRIBUTE].Value, @"^.+?\:", string.Empty), c => c.SelectSingleNode(SUMMARY).InnerText.Trim());
+                        }
                     }
                 }
-            }
 
-            config.XMLDocContainer = XMLDocs;
-            config.IsChecked = true;
+                config.XMLDocContainer = XMLDocs;
+                config.IsChecked = true;
+            }
+            catch (Exception ex)
+            {
+                config.ErrorMsg = $"Xml load error: {ex.Message}";
+            }
         }
     }
 }

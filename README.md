@@ -2,12 +2,11 @@
 通过XML注释或指定特性转换成字符串输出。
 
 <!--TOC-->
-- [SimpleString](#simplestring)
-    - [安装](#安装)
-    - [配置](#配置)
-    - [特性](#特性)
-    - [食用方法](#食用方法)
-    - [示例](#示例)
+      - [安装](#)
+      - [配置](#)
+      - [特性](#)
+      - [使用](#)
+      - [示例](#)
 <!--/TOC-->
 ---
 
@@ -21,14 +20,11 @@ var config = new Config
 {
     AttributeType = typeof(DescriptionAttribute), // 解析的特性，默认DescriptionAttribute（HandleType.Attribute时生效）
     Name = nameof(DescriptionAttribute.Description), // 解析的特性属性，默认DescriptionAttribute.Description（HandleType.Attribute时生效）
-    HandleType = HandleType.Attribute, // 处理方式 Attribute|XML（默认）
+    HandleOptions = HandleOptions.Attribute, // 处理方式 Attribute|XML（默认）
     HandCustomType = true, // 自定义类型处理，默认调用 ToString() 否则 ToSimpleString().
     IgnoreLoopReference = true, // 忽略循环引用（存在相同引用只输出一次否则为空），默认false.
     Operator = "= ", // 间隔符号，默认“ = ”
-    XMLDocPath = new HashSet<string> { 
-        "xxx.xml"
-    } // XML文档路径，类必须添加注释否则不会解析
-};
+}.AddXml("xxx.xml"); // XML文档路径，类必须添加注释否则不会解析
 ````
 > 自定义配置
 ````
@@ -59,14 +55,14 @@ public class ENAttribute : Attribute
 #### 特性
 >  忽略：[IgnoreSimpleString]
 
-#### 食用方法
+#### 使用
 > 通用
 ```
  // 初始化，默认全局
-SimpleString.SimpleString.Init(c =>
+SimpleString.Config(c =>
 {
     // 默认使用XML解析 需要指定XML文档
-    c.XMLDocPath.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "xxx.xml"));
+    c.AddXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "xxx.xml"));
 });
 
 // 直接调用
@@ -76,20 +72,20 @@ var str = new Test().ToSimpleString();
 var str = new Test().ToString();
 
 // 创建实例调用
-var str = new SimpleString.SimpleString(new Config
+var str = new SimpleString(new Config
 {
-    HandleType = HandleType.Attribute,
+    HandleOptions = HandleOptions.Attribute,
     Operator = ": "
 }).ToSimpleString(test);
 ```
 
-> .Net Core 优雅食用方法
+> 注入使用
 ````
 // 默认静态全局注入
 services.AddSimpleString(c =>
 {
     // 默认XML 需要指定XML文档
-    c.XMLDocPath.Add(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "WebApplication1.xml"));
+    c.AddXml(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "xxx.xml"));
 });
 // 指定特性配置注入
 services.AddSimpleString<Config>();
@@ -195,7 +191,7 @@ var str3 = _simpleString.ToSimpleString(test);
 var str4 = _enSimpleString.ToSimpleString(test);
 var str5 = new SimpleString.SimpleString(new Config
 {
-    HandleType = HandleType.Attribute,
+    HandleOptions = HandleOptions.Attribute,
     Operator = ": "
 }).ToSimpleString(test);
 

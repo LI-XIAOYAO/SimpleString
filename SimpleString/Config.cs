@@ -11,10 +11,25 @@ namespace SimpleString
     /// </summary>
     public class Config
     {
-        internal bool IsInit { get; set; }
+        private Type _attributeType = typeof(DescriptionAttribute);
+        private string _name = nameof(DescriptionAttribute.Description);
+        private string _operator = " = ";
+        private HandleOptions _handleOptions = HandleOptions.XML;
+
+        /// <summary>
+        /// XMLDocPath
+        /// </summary>
+        internal HashSet<string> XMLDocPath { get; } = new HashSet<string>();
+
+        /// <summary>
+        /// XMLDocContainer
+        /// </summary>
         internal IReadOnlyDictionary<string, Dictionary<string, string>> XMLDocContainer { get; set; }
 
-        private Type _attributeType = typeof(DescriptionAttribute);
+        /// <summary>
+        /// IsInit
+        /// </summary>
+        internal bool IsInit { get; set; }
 
         /// <summary>
         /// 特性，默认 <see cref="DescriptionAttribute"/>.
@@ -24,12 +39,9 @@ namespace SimpleString
             get => _attributeType;
             set
             {
-                if (IsInit)
-                {
-                    throw new InvalidOperationException("An operation has already been started on the current instance.");
-                }
+                CheckInit();
 
-                if (!value.IsSubclassOf(typeof(Attribute)))
+                if (!typeof(Attribute).IsAssignableFrom(value ?? throw new ArgumentNullException(nameof(AttributeType))))
                 {
                     throw new ArgumentException($"{value} is not a attribute.");
                 }
@@ -37,8 +49,6 @@ namespace SimpleString
                 _attributeType = value;
             }
         }
-
-        private string _name = nameof(DescriptionAttribute.Description);
 
         /// <summary>
         /// 特性属性名称，默认 <see cref="DescriptionAttribute.Description"/>.
@@ -48,16 +58,21 @@ namespace SimpleString
             get => _name;
             set
             {
-                if (IsInit)
+                CheckInit();
+
+                if (string.IsNullOrWhiteSpace(value))
                 {
-                    throw new InvalidOperationException("An operation has already been started on the current instance.");
+                    throw new ArgumentNullException(nameof(Name));
                 }
 
                 _name = value;
             }
         }
 
-        private string _operator = " = ";
+        /// <summary>
+        /// AttributeProp
+        /// </summary>
+        internal PropertyInfo AttributeProp { get; set; }
 
         /// <summary>
         /// 间隔符号，默认“ = ”
@@ -67,50 +82,28 @@ namespace SimpleString
             get => _operator;
             set
             {
-                if (IsInit)
-                {
-                    throw new InvalidOperationException("An operation has already been started on the current instance.");
-                }
+                CheckInit();
 
                 _operator = value;
             }
         }
 
-        private HandleType _handleType = HandleType.XML;
-
         /// <summary>
-        /// 处理方式，默认 <see cref="HandleType.XML"/>
+        /// 处理方式，默认 <see cref="HandleOptions.XML"/>
         /// </summary>
-        public HandleType HandleType
+        public HandleOptions HandleOptions
         {
-            get => _handleType;
+            get => _handleOptions;
             set
             {
-                if (IsInit)
+                CheckInit();
+
+                if (!Enum.IsDefined(typeof(HandleOptions), value))
                 {
-                    throw new InvalidOperationException("An operation has already been started on the current instance.");
+                    throw new ArgumentException(nameof(HandleOptions));
                 }
 
-                _handleType = value;
-            }
-        }
-
-        private HashSet<string> _XMLDocPath = new HashSet<string>();
-
-        /// <summary>
-        /// XML文档路径
-        /// </summary>
-        public HashSet<string> XMLDocPath
-        {
-            get => _XMLDocPath;
-            set
-            {
-                if (IsInit)
-                {
-                    throw new InvalidOperationException("An operation has already been started on the current instance.");
-                }
-
-                _XMLDocPath = value;
+                _handleOptions = value;
             }
         }
 
@@ -120,7 +113,7 @@ namespace SimpleString
         public bool IgnoreLoopReference { get; set; } = false;
 
         /// <summary>
-        /// 自定义类型处理，默认 false 调用 ToString()，否则 ToSimpleString().
+        /// 自定义类型处理，默认 false 调用 <see cref="object.ToString()"/>，否则调用 <see cref="SimpleString.ToSimpleString(object)"/>.
         /// </summary>
         public bool HandCustomType { get; set; } = false;
 
@@ -140,11 +133,6 @@ namespace SimpleString
         /// <returns></returns>
         internal Config Init()
         {
-            if (null == this)
-            {
-                throw new ArgumentNullException(nameof(Config));
-            }
-
             if (IsInit)
             {
                 return this;
@@ -152,25 +140,11 @@ namespace SimpleString
 
             IsInit = true;
 
-            if (HandleType.Attribute == HandleType)
+            if (HandleOptions.Attribute == HandleOptions)
             {
-                if (null == AttributeType)
+                if (null == (AttributeProp = AttributeType.GetProperty(Name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)))
                 {
-                    ErrorMsg = $"SimpleString '{nameof(AttributeType)}' property is null.";
-
-                    return this;
-                }
-
-                if (string.IsNullOrWhiteSpace(Name))
-                {
-                    ErrorMsg = $"SimpleString '{nameof(Name)}' property is null.";
-
-                    return this;
-                }
-
-                if (null == AttributeType.GetProperty(Name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase))
-                {
-                    ErrorMsg = $"SimpleString {AttributeType.Name} not found {Name} property.";
+                    ErrorMsg = $"Type {AttributeType.Name} not found property {Name}.";
 
                     return this;
                 }
@@ -180,6 +154,40 @@ namespace SimpleString
             else
             {
                 this.XMLDocResolver();
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// CheckInit
+        /// </summary>
+        /// <exception cref="InvalidOperationException"></exception>
+        private void CheckInit()
+        {
+            if (IsInit)
+            {
+                throw new InvalidOperationException("An operation has already been started on the current instance.");
+            }
+        }
+
+        /// <summary>
+        /// XML文档路径，类必须添加注释否则不会解析
+        /// </summary>
+        /// <param name="paths"></param>
+        /// <returns></returns>
+        public Config AddXml(params string[] paths)
+        {
+            if (paths is null || 0 == paths.Length)
+            {
+                throw new ArgumentException(nameof(paths));
+            }
+
+            CheckInit();
+
+            foreach (var item in paths)
+            {
+                XMLDocPath.Add(item);
             }
 
             return this;

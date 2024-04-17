@@ -1,6 +1,5 @@
 ﻿using SimpleString;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -18,7 +17,7 @@ namespace Microsoft.Extensions.DependencyInjection
         /// <returns></returns>
         public static IServiceCollection AddSimpleString(this IServiceCollection serviceProvider, Action<Config> config = null)
         {
-            SimpleString.SimpleString.Init(config);
+            SimpleString.SimpleString.Config(config);
 
             return serviceProvider.AddSingleton<AttributeString>();
         }
@@ -38,7 +37,7 @@ namespace Microsoft.Extensions.DependencyInjection
 
             var conf = new T();
             config?.Invoke(conf);
-            conf.HandleType = HandleType.Attribute;
+            conf.HandleOptions = HandleOptions.Attribute;
 
             return serviceProvider.AddSingleton(new SimpleString<T>(conf));
         }

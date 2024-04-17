@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SimpleString
 {
@@ -17,13 +15,18 @@ namespace SimpleString
         /// <param name="config">配置</param>
         public SimpleString(Config config)
         {
-            switch (config.HandleType)
+            if (config is null)
             {
-                case HandleType.Attribute:
+                throw new ArgumentNullException(nameof(config));
+            }
+
+            switch (config.HandleOptions)
+            {
+                case HandleOptions.Attribute:
                     _simpleString = new AttributeString(config);
                     break;
 
-                case HandleType.XML:
+                case HandleOptions.XML:
                 default:
                     _simpleString = new XMLString(config);
                     break;
@@ -31,24 +34,29 @@ namespace SimpleString
         }
 
         /// <summary>
-        /// 返回通过指定 <see cref="HandleType"/> 类型转换后的简单字符串
+        /// 返回通过指定 <see cref="HandleOptions"/> 类型转换后的简单字符串
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
         public string ToSimpleString(object obj) => _simpleString.ToSimpleString(obj);
 
         /// <summary>
-        /// 静态配置
+        /// 默认配置
         /// </summary>
-        public static Config Config { get; } = new Config();
+        public static Config DefaultConfig { get; } = new Config();
 
         /// <summary>
-        /// 初始化
+        /// 配置默认
         /// </summary>
         /// <param name="action"></param>
-        public static void Init(Action<Config> action)
+        public static void Config(Action<Config> action)
         {
-            action?.Invoke(Config);
+            if (action is null)
+            {
+                throw new ArgumentNullException(nameof(action));
+            }
+
+            action(DefaultConfig);
         }
     }
 

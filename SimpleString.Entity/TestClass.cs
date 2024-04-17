@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace SimpleString.Entity
 {
@@ -27,6 +25,22 @@ namespace SimpleString.Entity
         [Description("枚举")]
         public TestEnum TestEnum { get; set; }
 
+        /// <summary>
+        /// 枚举
+        /// </summary>
+        [Description("枚举Null")]
+        public TestEnum? TestEnumNull { get; set; }
+
+        /// <summary>
+        /// Null struct
+        /// </summary>
+        public TestStruct? TestStruct { get; set; }
+
+        /// <summary>
+        /// Struct
+        /// </summary>
+        public TestStruct TestStruct1 { get; set; }
+
         public override string ToString() => this.ToSimpleString();
     }
 
@@ -44,5 +58,23 @@ namespace SimpleString.Entity
         /// 枚举B
         /// </summary>
         B
+    }
+
+    /// <summary>
+    /// 测试结构
+    /// </summary>
+    public struct TestStruct
+    {
+        /// <summary>
+        /// Null int
+        /// </summary>
+        public int? MyProperty { get; set; }
+
+        /// <summary>
+        /// Int
+        /// </summary>
+        public int MyProperty1 { get; set; }
+
+        public override string ToString() => this.ToSimpleString();
     }
 }
