@@ -1,7 +1,6 @@
-﻿using SimpleString.Attributes;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
-namespace SimpleString.Entity
+namespace SimpleStringCore.Entity
 {
     /// <summary>
     /// Test

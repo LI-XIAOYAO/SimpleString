@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleString
+namespace SimpleStringCore
 {
     /// <summary>
     /// 简单字符串

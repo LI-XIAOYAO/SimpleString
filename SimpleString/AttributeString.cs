@@ -1,12 +1,11 @@
-﻿using SimpleString.Attributes;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace SimpleString
+namespace SimpleStringCore
 {
     /// <summary>
     /// 特性转换字符串
@@ -63,7 +62,7 @@ namespace SimpleString
                 int index = 0;
                 foreach (PropertyInfo prop in type.GetProperties())
                 {
-                    if (prop.IsDefined(typeof(IgnoreSimpleStringAttribute)) || ignoreProps.Contains(prop))
+                    if (!prop.CanRead || prop.IsDefined(typeof(IgnoreSimpleStringAttribute)) || ignoreProps.Contains(prop))
                     {
                         continue;
                     }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleString.Entity
+namespace SimpleStringCore.Entity
 {
     /// <summary>
     /// 泛型

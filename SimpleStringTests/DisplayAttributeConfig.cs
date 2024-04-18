@@ -1,4 +1,4 @@
-﻿using SimpleString;
+﻿using SimpleStringCore;
 using System.ComponentModel;
 
 namespace SimpleStringTests

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Xml;
 
-namespace SimpleString.Extenisons.Internal
+namespace SimpleStringCore
 {
     /// <summary>
     /// XML解析
@@ -32,9 +32,9 @@ namespace SimpleString.Extenisons.Internal
 
             if (0 == config.XMLDocPath.Count)
             {
-                config.ErrorMsg = $"Param {nameof(config.XMLDocPath)} is empty.";
+                config.ErrorMsg = $"XML path not configured.";
 
-                throw new ArgumentException("Param is empty.", nameof(config.XMLDocPath));
+                throw new ArgumentException(config.ErrorMsg);
             }
 
             var XMLDocs = new Dictionary<string, Dictionary<string, string>>();

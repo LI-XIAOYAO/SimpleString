@@ -1,4 +1,4 @@
-﻿namespace SimpleString
+﻿namespace SimpleStringCore
 {
     /// <summary>
     /// 处理类型选项

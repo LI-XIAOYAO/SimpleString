@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace SimpleString.Attributes
+namespace SimpleStringCore
 {
     /// <summary>
     /// 忽略转换
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Enum | AttributeTargets.Struct)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Enum | AttributeTargets.Struct)]
     public class IgnoreSimpleStringAttribute : Attribute
     {
     }

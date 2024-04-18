@@ -1,12 +1,11 @@
-﻿using SimpleString.Attributes;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace SimpleString
+namespace SimpleStringCore
 {
     /// <summary>
     /// 文档注释转换字符串
@@ -63,7 +62,7 @@ namespace SimpleString
                 int index = 0;
                 foreach (PropertyInfo prop in type.GetProperties())
                 {
-                    if (prop.IsDefined(typeof(IgnoreSimpleStringAttribute)) || ignoreProps.Contains(prop))
+                    if (!prop.CanRead || prop.IsDefined(typeof(IgnoreSimpleStringAttribute)) || ignoreProps.Contains(prop))
                     {
                         continue;
                     }
@@ -95,9 +94,9 @@ namespace SimpleString
                             // 枚举
                             if (propertyType.IsEnum || (propertyType = GetNullableUnderlyingType(prop.PropertyType)).IsEnum)
                             {
-                                var enumName = null == value || !IsDefinedXMLAnnotation(propertyType.GetField(value.ToString()), out annotation) ? string.Empty : annotation;
+                                string enumAnnotation = null == value || !IsDefinedXMLAnnotation(propertyType.GetField(value.ToString()), out enumAnnotation) ? string.Empty : enumAnnotation;
 
-                                stringBuilder.Append($"{annotation}{_config.Operator}{value?.ToString()}{(string.IsNullOrWhiteSpace(enumName) ? string.Empty : $"[{enumName}]")}");
+                                stringBuilder.Append($"{annotation}{_config.Operator}{value?.ToString()}{(string.IsNullOrWhiteSpace(enumAnnotation) ? string.Empty : $"[{enumAnnotation}]")}");
                             }
                             else
                             {

@@ -1,11 +1,10 @@
-﻿using SimpleString.Attributes;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
-namespace SimpleString
+namespace SimpleStringCore
 {
     /// <summary>
     /// 简单字符串
@@ -79,7 +78,7 @@ namespace SimpleString
             }
 
             // 值类型、string
-            if (SimpleStringBase.IsValueType(type))
+            if (IsValueType(type))
             {
                 stringBuilder.Append(obj.ToString());
 
@@ -239,7 +238,7 @@ namespace SimpleString
         /// <returns></returns>
         protected static bool IsValueType(Type type)
         {
-            return type.IsValueType && type.IsPrimitive || type == typeof(string) || (type.IsGenericType && typeof(Nullable<>) == type.GetGenericTypeDefinition() && SimpleStringBase.IsValueType(Nullable.GetUnderlyingType(type)));
+            return type.IsValueType && type.IsPrimitive || type == typeof(string) || (type.IsGenericType && typeof(Nullable<>) == type.GetGenericTypeDefinition() && IsValueType(Nullable.GetUnderlyingType(type)));
         }
 
         /// <summary>

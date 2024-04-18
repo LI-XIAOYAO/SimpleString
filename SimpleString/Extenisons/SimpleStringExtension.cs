@@ -1,4 +1,4 @@
-﻿using SimpleString;
+﻿using SimpleStringCore;
 
 namespace System
 {
@@ -23,7 +23,7 @@ namespace System
                 {
                     if (null == _simpleString)
                     {
-                        switch (SimpleString.SimpleString.DefaultConfig.HandleOptions)
+                        switch (SimpleString.DefaultConfig.HandleOptions)
                         {
                             case HandleOptions.Attribute:
                                 _simpleString = new AttributeString();

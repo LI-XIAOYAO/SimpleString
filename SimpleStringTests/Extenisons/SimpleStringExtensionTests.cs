@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using SimpleString.Entity;
+using SimpleStringCore.Entity;
 using SimpleStringTests;
 
-namespace SimpleString.Extenisons.Tests
+namespace SimpleStringCore.Extenisons.Tests
 {
     [TestClass()]
     public class SimpleStringExtensionTests

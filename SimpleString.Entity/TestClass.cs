@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace SimpleString.Entity
+namespace SimpleStringCore.Entity
 {
     /// <summary>
     /// 测试类

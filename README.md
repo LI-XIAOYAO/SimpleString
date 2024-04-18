@@ -198,7 +198,7 @@ var str1 = test.ToString();
 var str2 = test.ToSimpleString();
 var str3 = _simpleString.ToSimpleString(test);
 var str4 = _enSimpleString.ToSimpleString(test);
-var str5 = new SimpleString.SimpleString(new Config
+var str5 = new SimpleString(new Config
 {
     HandleOptions = HandleOptions.Attribute,
     Operator = ": "
